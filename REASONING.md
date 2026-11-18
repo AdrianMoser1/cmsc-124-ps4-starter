@@ -62,11 +62,18 @@ ancestor_r places the recursive clause before the base clause, top-to-bottom sea
 ## P10
 ancestor(X, jim) tries the base case parent(X, jim) first, which matches parent(pat, jim) to yield X=pat. Backtracking enters the recursive clause to trace upward through parent(X, P), ancestor(P, jim), finding X=bob second and X=tom third before exhausting the tree at count 3.
 
+Error: P10.second
+Correction: After the first match (pat, jim), prolog backtracks to recursive clause, scanning the parent facts again all the way up from the top(parent(X, P)). Hence, it encounters parent(tom, bob) and checks again if ancestor(bob, jim) is true. Recurse back at the top instead of bubbling upwards wherever jim was the second argument.
+
 ## P11
 reach places its left-recursive call (reach(X, Z)) first, top-to-bottom clause search repeatedly enters the first clause without ever reaching a base fact or binding variables. The search enters an infinite recursion that exceeds the execution budget, making all three fields unbounded.
 
 ## P12
 reach_r places the base case (edge(X, Y)) first and reads an edge before recursing, top-to-bottom search finds the path a -> b -> c -> d and outputs true. However, backtracking on ; enters the cycle a -> b -> c -> a indefinitely, making the second answer and total count unbounded (wait: if P12 expects true / none / 1 or true / unbounded / unbounded, note that reach_r(a, d) finds true first and loops on ; due to the a->b->c->a cycle).
+
+Error: P12.second and P12.count
+Correction: Instead of stopping at c -> d, Prolog backtracks into the recursive clause for reach_r(c, d) and takes the cyclic edge: edge(c, a), leading back to reach_r(a, d). Traversing the graph the second time in the loop (a -> b -> c -> d).
+Since, it is a cycle (a -> b -> c -> a), you can loop around that cycle infinitely many times before finally taking the exit edge to d, thus unbounded.
 
 ## P13
 Using the list [H|T] and [] pattern rules, len([a, b, c], N) recursively strips elements down to the base case len([], 0) and unwinds while evaluating N is M + 1 three times to yield N=3. No alternative clauses match, resulting in none and 1 answer.
