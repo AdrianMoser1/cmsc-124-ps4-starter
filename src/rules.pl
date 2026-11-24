@@ -79,3 +79,7 @@ route(From, To, Path) :-
 
 travel(To, To, Visited, Path) :-
     rev(Visited, Path).
+travel(From, To, Visited, Path) :-
+    edge(From, Next),
+    \+ elem(Next, Visited),
+    travel(Next, To, [Next|Visited], Path).
