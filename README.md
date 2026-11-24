@@ -6,6 +6,7 @@ Problem Set 4. The assignment manual defines the work and the submission rules.
 
 ## Pair
 - Adrian Moser(AdrianMoser1)
+- JP Salomeo(ysxiaixsy)
 
 ## Layout
 
