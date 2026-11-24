@@ -42,8 +42,15 @@ descendant(D, A) :-
 
 % count_of(X, List, N): X occurs N times in List. N is 0 for the empty
 % list, which is your base case.
-count_of(_, _, _) :-
-    throw(not_implemented(count_of/3)).
+count_of(_, [], 0).
+count_of(X, [H|T], N) :-
+    H = X,
+    count_of(X, T, M),
+    N is M + 1.
+count_of(X, [H|T], N) :-
+    H \= X,
+    count_of(X, T, M),
+    N is M.
 
 % rev(List, Reversed): Reversed holds the elements of List in the other
 % order. Reverse the tail. Then use join/3 to put the head at the end.
